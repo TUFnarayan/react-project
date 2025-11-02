@@ -1,16 +1,41 @@
-# React + Vite
+# Task Manager (React + Vite)
+A simple task manager built with React and Vite. Features include adding tasks, marking them as completed, deleting tasks, filtering by status, and viewing task statistics.
+Features
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Add tasks using the input field and Enter key.
+Clear input with Escape.
+Toggle task completion via checkbox.
+Delete tasks with the delete button.
+Filter tasks: All, Active, Completed.
+Clear all completed tasks.
+View stats: Total, Active, Completed.
 
-Currently, two official plugins are available:
+# Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+React (Vite)
+Jest + React Testing Library for testing
+Babel for JSX/ESM support in tests
 
-## React Compiler
+# Project Structure
+src/
+  components/      # TaskInput, TaskItem, TaskFilters, TaskStats
+  hooks/           # useFilteredTasks
+  __tests__/       # Jest + RTL test files
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+# Setup
+Install dependencies:
+Shellnpm installShow more lines
+Run development server:
+Shellnpm run devShow more lines
+Testing
+Run all tests:
+Shellnpm testShow more lines
+Run with coverage:
+Shellnpm test -- --coverageShow more lines
+# What’s Tested
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Adding, toggling, deleting tasks
+Clearing completed tasks
+Filters (All, Active, Completed)
+Stats updates
+Hook logic (useFilteredTasks)
