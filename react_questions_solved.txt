@@ -1,0 +1,162 @@
+React questions solved
+
+1. What’s wrong with this code?
+-----------------------------------
+function SomeComponent() {
+  if (someCondition) {
+    const [state, setState] = useState(0);
+  }
+  return <div>{state}</div>;
+}
+
+This code has two main issues:
+1. Violation of Hook Rules – Hooks like useState must always be called at the top level, not inside conditionals or loops. 
+   React depends on their call order to maintain state.
+2. Block Scope Error – 'state' is declared inside an if block, making it inaccessible outside.
+
+Correct approach:
+function SomeComponent() {
+  const [state, setState] = useState(0);
+  if (someCondition) {
+    // conditional logic
+  }
+  return <div>{state}</div>;
+}
+
+
+2. When does this useEffect run?
+-----------------------------------
+useEffect(() => {
+  console.log('Effect runs');
+}, [count]);
+
+It runs:
+- After the first render (mount)
+- Every time 'count' changes
+If [] is passed, it runs only once on mount.
+If no dependencies are passed, it runs after every render.
+
+Example cleanup:
+useEffect(() => {
+  const timer = setInterval(() => console.log('Running...'), 1000);
+  return () => clearInterval(timer);
+}, [count]);
+
+
+3. Which lifecycle method cleans up timers in class components?
+-----------------------------------
+componentWillUnmount()
+
+It runs before a component is removed from the DOM.
+Use it to clear intervals, cancel network requests, and remove listeners.
+
+Example:
+class Timer extends React.Component {
+  componentDidMount() {
+    this.interval = setInterval(() => console.log('Tick'), 1000);
+  }
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+  render() {
+    return <div>Timer running...</div>;
+  }
+}
+
+
+4. What problem does Context API solve?
+-----------------------------------
+It solves prop drilling — passing props through multiple layers unnecessarily.
+
+Example:
+const UserContext = createContext();
+
+function App() {
+  return (
+    <UserContext.Provider value={{ name: 'Narayan' }}>
+      <Parent />
+    </UserContext.Provider>
+  );
+}
+
+function GrandChild() {
+  const { name } = useContext(UserContext);
+  return <div>Hello, {name}</div>;
+}
+
+Benefits:
+- Avoids prop drilling
+- Centralized data management
+- Great for themes, authentication, user data
+
+
+5. What does this custom hook do?
+-----------------------------------
+function useToggle(initial = false) {
+  const [value, setValue] = useState(initial);
+  const toggle = () => setValue(v => !v);
+  return [value, toggle];
+}
+
+This hook handles boolean state toggling (e.g., show/hide modals).
+
+Example:
+function ModalExample() {
+  const [isOpen, toggleOpen] = useToggle();
+  return (
+    <div>
+      <button onClick={toggleOpen}>Toggle Modal</button>
+      {isOpen && <div>Modal Content</div>}
+    </div>
+  );
+}
+
+Benefits:
+- Cleaner code
+- Reusable logic
+- Simplified state handling
+
+
+6. Explain the 3 lifecycle phases in React
+-----------------------------------
+React class components go through 3 lifecycle phases:
+
+1. Mounting – Component creation and insertion into DOM
+   Methods: constructor, render, componentDidMount
+
+2. Updating – Triggered when props or state changes
+   Methods: render, componentDidUpdate
+
+3. Unmounting – Component removal
+   Method: componentWillUnmount
+
+In functional components, useEffect covers all lifecycle behaviors.
+
+
+7. What is lifting state up and why use it?
+-----------------------------------
+Lifting state up = moving shared state to the nearest common parent.
+
+Example:
+function Parent() {
+  const [value, setValue] = useState('');
+  return (
+    <>
+      <Input value={value} onChange={setValue} />
+      <Preview value={value} />
+    </>
+  );
+}
+
+function Input({ value, onChange }) {
+  return <input value={value} onChange={e => onChange(e.target.value)} />;
+}
+
+function Preview({ value }) {
+  return <p>Preview: {value}</p>;
+}
+
+Why use it?
+- Keeps data consistent
+- Prevents duplicate states
+- Centralizes logic and improves debugging
